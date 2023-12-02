@@ -125,3 +125,32 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Dependency directories
+node_modules/
+pods/
+
+# Gradle files
+android/.gradle/
+android/app/build/
+
+# CocoaPods files
+ios/Pods/
+ios/Podfile.lock
+ios/Podfile.user.lock
+
+# Android
+android/app/build/
+android/captures/
+
+# iOS
+ios/build/
+ios/Pods/
+ios/*.xcworkspace/
+
+# Miscellaneous
+.DS_Store
+.env*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
