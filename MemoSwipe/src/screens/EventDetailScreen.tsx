@@ -3,12 +3,18 @@ import { View, Button, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
+import { pickImage } from '../services/imgStorageService';
+
 
 type EventDetailScreenProps = {
     navigation: StackNavigationProp<RootStackParamList, 'EventDetail'>;
   };
 
 const EventDetailScreen: React.FC<EventDetailScreenProps> = ({navigation}) => {
+  const handleUploadButtonClick = () => {
+    pickImage();
+  };
+
   return (
     <View style={commonStyles.container}>
       <Text>Event's Name</Text>
@@ -26,7 +32,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({navigation}) => {
       />
       <Button
         title="+"
-        //onPress={() => upload images }
+        onPress={handleUploadButtonClick}
       />
       <Button
         title="Evaluate"
