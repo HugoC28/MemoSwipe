@@ -1,6 +1,6 @@
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
-import ImagePicker, { launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
+import { launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
 
 const generateUniqueImageName = () => {
   const timestamp = new Date().getTime();
@@ -8,7 +8,7 @@ const generateUniqueImageName = () => {
 };
 
 export const uploadImage = async (uri: string, imageName: string) => {
-  const reference = storage().ref(`images/${imageName}`);
+  const reference = storage().ref(`Photos/${imageName}`);
   const task = reference.putFile(uri);
 
   try {
@@ -21,17 +21,25 @@ export const uploadImage = async (uri: string, imageName: string) => {
   }
 };
 
-export const addImageToFirestore = async (imageUrl: string | null, otherData: any) => {
+export const addImageToFirestore = async (imageUrl: string | null, eventId: string, uploaderId: string) => {
   if (!imageUrl) {
     console.error('Invalid image URL');
     return;
   }
 
   try {
-    await firestore().collection('images').add({
-      imageUrl,
-      otherData,
+    const eventRef = firestore()
+      .collection('Events')
+      .doc(eventId)
+      .collection('Photos');
+
+    await eventRef.add({
+      dislikes: [],
+      likes: [],
+      uploader_id: uploaderId,
+      url: imageUrl,
     });
+
     console.log('Image data added to Firestore!');
   } catch (e) {
     console.error('Error adding image data to Firestore: ', e);
@@ -43,7 +51,7 @@ export const pickImage = () => {
     mediaType: 'photo' as const, // Set mediaType to 'photo' or 'video'
   };
 
-  ImagePicker.launchImageLibrary(options, (response: ImagePickerResponse) => {
+  launchImageLibrary(options, (response: ImagePickerResponse) => {
     if (response.didCancel) {
       console.log('User cancelled image picker');
     } else if (response.assets && response.assets.length > 0 && response.assets[0].uri) {
@@ -53,8 +61,7 @@ export const pickImage = () => {
       uploadImage(uri, imageName)
         .then((imageUrl) => {
           if (imageUrl) {
-            const otherData = {/* Add your other data here */};
-            addImageToFirestore(imageUrl, otherData);
+            addImageToFirestore(imageUrl, 'mBRSLWVzup7jEsZyITVn', 'id001');
           }
         })
         .catch((error) => {
@@ -63,3 +70,4 @@ export const pickImage = () => {
     }
   });
 };
+

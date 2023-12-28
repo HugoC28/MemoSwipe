@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "812003692578",
+    "project_id": "memoswipe-ef543",
+    "storage_bucket": "memoswipe-ef543.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812003692578:android:6a1e54425ddaf20f8e3a7b",
+        "android_client_info": {
+          "package_name": "com.memoswipe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9MeYlYzjzHZ0k0hAW71923WVdXE7hhjo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
