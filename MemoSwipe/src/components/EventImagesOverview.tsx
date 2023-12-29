@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, FlatList, Text, Dimensions, ScrollView, StyleSheet } from 'react-native';
+import { View, Image, Text, ScrollView, StyleSheet } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
 interface Photo {

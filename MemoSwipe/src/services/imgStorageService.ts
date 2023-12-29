@@ -46,8 +46,12 @@ export const addImageToFirestore = async (imageUrl: string | null, eventId: stri
   }
 };
 
-export const pickImage = () => {
-  const options = {
+interface PickImageParams {
+  userId: string;
+}
+
+export const pickImage = ({ userId }: { userId: string }): void => {
+    const options = {
     mediaType: 'photo' as const, // Set mediaType to 'photo' or 'video'
   };
 
@@ -61,7 +65,7 @@ export const pickImage = () => {
       uploadImage(uri, imageName)
         .then((imageUrl) => {
           if (imageUrl) {
-            addImageToFirestore(imageUrl, 'mBRSLWVzup7jEsZyITVn', 'id001');
+            addImageToFirestore(imageUrl, 'mBRSLWVzup7jEsZyITVn', userId);
           }
         })
         .catch((error) => {
