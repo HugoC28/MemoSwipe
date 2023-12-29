@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, FlatList, Text, Dimensions } from 'react-native';
+import { View, Image, FlatList, Text, Dimensions, ScrollView, StyleSheet } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
 interface Photo {
@@ -10,10 +10,55 @@ interface Photo {
 }
 
 interface EventImagesOverviewProps {
-    eventId: string;
-  }
+  eventId: string;
+}
 
-const EventImagesOverview: React.FC<EventImagesOverviewProps> = ({eventId}) => {
+// Define the styles
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  imageGridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  imageContainer: {
+    position: 'relative',
+    width: '31%', // Set width to 1/3 of the screen
+    aspectRatio: 1, // Ensure images maintain aspect ratio
+    margin: 4,
+  },
+  image: {
+    width: '100%', // Take the whole container
+    aspectRatio: 1, // Ensure images maintain aspect ratio
+  },
+  imageWrapper: {
+    flex: 1,
+    overflow: 'hidden', // Clip the shadow outside the image
+    borderRadius: 3, // Adjust the border radius as needed
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+  },  
+  overlayText: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    padding: 4,
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Adjust the alpha value for transparency
+    borderRadius: 10, // Adjust the border radius for a circular shape
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 5, // For Android elevation
+  },
+});
+
+const EventImagesOverview: React.FC<EventImagesOverviewProps> = ({ eventId }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
 
   useEffect(() => {
@@ -29,6 +74,9 @@ const EventImagesOverview: React.FC<EventImagesOverviewProps> = ({eventId}) => {
           updatedPhotos.push(data);
         });
 
+        // Sort the photos based on their rate
+        updatedPhotos.sort((a, b) => (b.likes.length - b.dislikes.length) - (a.likes.length - a.dislikes.length));
+
         setPhotos(updatedPhotos);
       });
 
@@ -37,16 +85,18 @@ const EventImagesOverview: React.FC<EventImagesOverviewProps> = ({eventId}) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={photos}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={{ margin: 5 }}>
-            <Image source={{ uri: item.url }} style={{ width: Dimensions.get('window').width / 4, height: Dimensions.get('window').width / 4, resizeMode: 'cover' }} />
+      <ScrollView contentContainerStyle={styles.imageGridContainer}>
+        {photos.map((photo, index) => (
+          <View key={index} style={styles.imageContainer}>
+            <View style={styles.imageWrapper}>
+              <Image source={{ uri: photo.url }} style={styles.image} />
+              <Text style={styles.overlayText}>
+                {photo.likes.length - photo.dislikes.length}
+              </Text>
+            </View>
           </View>
-        )}
-        horizontal={true} // Display images side by side
-      />
+        ))}
+      </ScrollView>
     </View>
   );
 };

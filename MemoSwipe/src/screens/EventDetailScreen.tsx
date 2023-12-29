@@ -17,7 +17,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation }) => 
 
   return (
     <View style={commonStyles.container}>
-      <View style={{ height: 200, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+      <View style={{ height: 200, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
         <Button
           title="<"
           onPress={() => navigation.navigate('EventsList')}
@@ -29,7 +29,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation }) => 
         />
       </View>
       <EventImagesOverview eventId='mBRSLWVzup7jEsZyITVn' />
-      <View style={{ height: 100, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+      <View style={{ height: 100, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
         <Button
           title="Download"
           onPress={() => navigation.navigate('DownloadAlbum')}
