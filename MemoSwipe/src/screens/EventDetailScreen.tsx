@@ -12,7 +12,7 @@ type EventDetailScreenProps = {
 
 const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation }) => {
   const handleUploadButtonClick = () => {
-    pickImage();
+    pickImage({userId: 'user0034'});
   };
 
   return (
