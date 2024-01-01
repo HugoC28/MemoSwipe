@@ -9,6 +9,18 @@ interface authResult {
 //returns null if signup was okay, or a error string
 export const authSignUp = async (username: string, email: string, password: string) =>
 {  
+    if(username.trim() == "")
+    {
+        return "Username can not be empty"
+    }
+    if(email.trim() == "")
+    {
+        return "Email can not be empty"
+    }
+    if(password.trim() == "")
+    {
+        return "Password can not be empty"
+    }
         var resultError = null;
         await auth()
         .createUserWithEmailAndPassword(email, password)
@@ -29,13 +41,24 @@ export const authSignUp = async (username: string, email: string, password: stri
 
 export const authLogin = async (email: string, password: string) =>
 {
+    if(email.trim() == "")
+    {
+        return "Email can not be empty"
+    }
+    if(password.trim() == "")
+    {
+        return "Password can not be empty"
+    }
     var resultError = null;
-    await auth()
-    .signInWithEmailAndPassword(email, password)
-    .catch(error => {
-        console.warn("Error:" + error.code);
-        resultError = getErrorMessage(error.code);
-    });
+    
+        await auth()
+        .signInWithEmailAndPassword(email, password)
+        .catch(error => {
+            console.warn("Error:" + error.code);
+            resultError = getErrorMessage(error.code);
+        });
+    
+   
     return resultError;
 }
 

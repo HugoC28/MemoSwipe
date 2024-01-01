@@ -18,7 +18,7 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const login = async () => {
     setLoading(true);
@@ -71,7 +71,7 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <Text style={styles.link}>Forgot you password?</Text>
       </TouchableOpacity>
-      {error && <Text style={styles.errortext}>{error}</Text>}
+      {error!="" && <Text style={styles.errortext}>{error}</Text>}
       {isLoading ? (
         <ActivityIndicator size="large" color="#000"/>      
       ) : (

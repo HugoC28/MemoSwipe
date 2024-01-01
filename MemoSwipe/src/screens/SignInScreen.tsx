@@ -20,7 +20,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
     const [isLoading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
 
     const signUp = async () => {
       setLoading(true);
@@ -78,7 +78,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           onChangeText={setPassword}
         />
       </View>
-      {error && <Text style={styles.errortext}>{error}</Text>}
+      {error!="" && <Text style={styles.errortext}>{error}</Text>}
       {isLoading ? (
         <ActivityIndicator size="large" color="#000"/>      
       ) : (
