@@ -1,16 +1,41 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, TouchableOpacity, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope, faLock, faUser} from '@fortawesome/free-solid-svg-icons';
 import commonStyles from '../assets/styles';
+import { ActivityIndicator } from 'react-native-paper';
+import { authSignUp } from '../services/authService';
+
 
 type SignInScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'SignIn'>;
 };
 
+
 const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
+  
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [isLoading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const signUp = async () => {
+      setLoading(true);
+      const error = await authSignUp(username,email,password);
+      if(error != null)
+      {     
+        setError(error);
+      }
+      else
+      {
+        navigation.navigate("EventsList");
+      }      
+      setLoading(false);
+      
+    }
   return (
     <View style={commonStyles.container}>
        <Image
@@ -27,6 +52,8 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           style={styles.input}
           placeholder="Your username"
           autoCapitalize="none"
+          value={username}
+          onChangeText={setUsername}
         />
       </View>
       <View style={styles.textInputContainer}>
@@ -35,7 +62,9 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           style={styles.input}
           placeholder="Your email address"
           keyboardType="email-address"
-          autoCapitalize="none"
+          autoCapitalize="none"          
+          value={email}
+          onChangeText={setEmail}
         />
       </View>
       <View style={styles.textInputContainer}>
@@ -44,15 +73,22 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           style={styles.input}
           placeholder="Your password"
           secureTextEntry={true}
-          autoCapitalize="none"
+          autoCapitalize="none"          
+          value={password}
+          onChangeText={setPassword}
         />
       </View>
-      <TouchableOpacity
+      {error!="" && <Text style={styles.errortext}>{error}</Text>}
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#000"/>      
+      ) : (
+        <TouchableOpacity
         style={styles.button}          
-        onPress={() => navigation.navigate("EventsList")}
-      >
-        <Text style={styles.buttontext}>Sign Up</Text>
-      </TouchableOpacity>
+        onPress={() => signUp()}
+        >
+          <Text style={styles.buttontext}>Sign Up</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -120,5 +156,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10
   },
+  errortext: {
+    color: "red",
+    fontSize: 14,
+  },
 });
+
 export default SignInScreen;
