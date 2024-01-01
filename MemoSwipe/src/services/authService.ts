@@ -67,3 +67,15 @@ export const getUserId = () =>
     const user = auth().currentUser;
     return user?.uid;
 }
+
+export const getUsername = () =>
+{
+    const user = auth().currentUser;
+    return user?.displayName;
+}
+
+export const getUserEmail = () =>
+{
+    const user = auth().currentUser;
+    return user?.email;
+}
