@@ -78,6 +78,13 @@ function getErrorMessage(errorcode: string): string
         case 'auth/weak-password':                  
             resultError= "Password too weak";
             break;
+        case 'auth/user-disabled':                  
+            resultError= "Account is disabled";
+            break;
+        case 'auth/user-not-found':  
+        case 'auth/wrong-password':                  
+            resultError= "Wrong username/password";
+            break;
         default:
             resultError = "Unkown error";
             break;
