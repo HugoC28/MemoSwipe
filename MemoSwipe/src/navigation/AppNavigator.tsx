@@ -16,7 +16,7 @@ export type RootStackParamList = {
   LogIn: undefined;
   EventsList: undefined;
   CreateEvent: undefined;
-  EventDetail: undefined;
+  EventDetail: {eventId: string};
   EditEvent: undefined;
   DownloadAlbum: undefined;
   EvaluatePhoto: undefined;

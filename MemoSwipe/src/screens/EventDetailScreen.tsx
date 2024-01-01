@@ -2,18 +2,25 @@ import React from 'react';
 import { View, Button, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-ico-material-design';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
 import { pickImage } from '../services/imgStorageService';
 import EventImagesOverview from '../components/EventImagesOverview';
+import { getUserId } from '../services/authService';
 
 type EventDetailScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'EventDetail'>;
+  route: RouteProp<RootStackParamList, 'EventDetail'>;
 };
 
-const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation }) => {
+const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route }) => {
+  const { eventId } = route.params;
+  console.debug("Eventdetails for eventID: " + eventId);
+  console.debug("UserID: " + getUserId());
+
   const handleUploadButtonClick = () => {
-    pickImage({userId: 'user0034'});
+    pickImage({userId: "user0034"}); //replaces by user Id
   };
 
   const styles = StyleSheet.create({
