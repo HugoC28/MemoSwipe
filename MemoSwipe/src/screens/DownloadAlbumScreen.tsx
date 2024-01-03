@@ -5,7 +5,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
 
 type DownloadAlbumScreenProps = {
-    navigation: StackNavigationProp<RootStackParamList, 'EventsList'>;
+    navigation: StackNavigationProp<RootStackParamList, 'DownloadAlbum'>;
   };
 
 const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation}) => {
@@ -14,7 +14,7 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation}) =
       <Text>Download</Text>
       <Button
         title="<"
-        onPress={() => navigation.navigate('EventDetail')}
+        onPress={() => navigation.goBack()}
       />
       <Button
         title="OK"

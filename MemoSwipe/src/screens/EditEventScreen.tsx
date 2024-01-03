@@ -5,7 +5,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
 
 type EditEventScreenProps = {
-    navigation: StackNavigationProp<RootStackParamList, 'EventsList'>;
+    navigation: StackNavigationProp<RootStackParamList, 'EditEvent'>;
   };
 
 const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation}) => {
@@ -14,11 +14,11 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation}) => {
       <Text>Edit</Text>
       <Button
         title="<"
-        onPress={() => navigation.navigate('EventDetail')}
+        onPress={() => navigation.goBack()}
       />
       <Button
         title="OK"
-        onPress={() => navigation.navigate('EventDetail')} // And save Info
+        onPress={() => navigation.goBack()} // And save Info
       />
     </View>
   );

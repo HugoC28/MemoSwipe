@@ -6,7 +6,7 @@ import commonStyles from '../assets/styles';
 import ImageSwipe from '../components/ImageSwipe';
 
 type EvaluatePhotoScreenProps = {
-    navigation: StackNavigationProp<RootStackParamList, 'EventDetail'>;
+    navigation: StackNavigationProp<RootStackParamList, 'EvaluatePhoto'>;
   };
 
 const EvaluatePhotoScreen: React.FC<EvaluatePhotoScreenProps> = ({navigation}) => {
@@ -15,7 +15,7 @@ const EvaluatePhotoScreen: React.FC<EvaluatePhotoScreenProps> = ({navigation}) =
       <View style={{ height: 200, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
         <Button
           title="<"
-          onPress={() => navigation.navigate('EventDetail')}
+          onPress={() => navigation.goBack()}
         />
         <Text style={{ color: 'black' }}>Event's name</Text>
       </View>
