@@ -17,9 +17,9 @@ export type RootStackParamList = {
   EventsList: undefined;
   CreateEvent: undefined;
   EventDetail: {eventId: string};
-  EditEvent: undefined;
-  DownloadAlbum: undefined;
-  EvaluatePhoto: undefined;
+  EditEvent: {eventId: string, eventTitle: string};
+  DownloadAlbum: {eventId: string, eventTitle: string};
+  EvaluatePhoto: {eventId: string, eventTitle: string};
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

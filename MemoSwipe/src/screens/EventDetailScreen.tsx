@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Button, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import EventImagesOverview from '../components/EventImagesOverview';
 import { getUserId } from '../services/authService';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faDownload, faPlus} from '@fortawesome/free-solid-svg-icons';
+import firestore from '@react-native-firebase/firestore';
 
 
 type EventDetailScreenProps = {
@@ -18,12 +19,43 @@ type EventDetailScreenProps = {
 
 const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route }) => {
   const { eventId } = route.params;
+  const [eventTitle,setEventTitle]= useState("")
+  const fetchEventName = async () => {
+    try {
+      const snapshot = await firestore()
+        .collection('Events')
+        .doc(eventId)
+        .get();
+  
+      if (snapshot.exists) {
+        const title = snapshot.data()?.title;
+        if (title) {
+          setEventTitle(title);
+        } else {
+          console.error('Title not found');
+        }
+      } else {
+        console.error('Event not found');
+      }
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+  
+  fetchEventName();
+  
   console.debug("Eventdetails for eventID: " + eventId);
   console.debug("UserID: " + getUserId());
 
   const handleUploadButtonClick = () => {
-    pickImage({userId: "user0034"}); //replaces by user Id
+    const userId = getUserId?.(); // Optional chaining to handle potential undefined
+    if (userId) {
+      pickImage({ userId });
+    } else {
+      console.error("User ID is undefined");
+    }
   };
+
 
   const styles = StyleSheet.create({
     buttonContainer: {
@@ -56,26 +88,26 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
           title="<"
           onPress={() => navigation.navigate('EventsList')}
         />
-        <Text style={{ color: 'black' }}>Event's name</Text>
+        <Text style={{ color: 'black' }}>{eventTitle}</Text>
         <Button
           title="Edit"
-          onPress={() => navigation.navigate('EditEvent')}
+          onPress={() => navigation.navigate('EditEvent', {eventId: eventId, eventTitle: eventTitle})}
         />
       </View>
-      <EventImagesOverview eventId='mBRSLWVzup7jEsZyITVn' />
+      <EventImagesOverview eventId={eventId} />
       <View style={{width:'100%' , height: 100, marginTop:4, backgroundColor: '#d9d9d9', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-        <TouchableOpacity onPress={() => navigation.navigate('DownloadAlbum')}>
+        <TouchableOpacity onPress={() => navigation.navigate('DownloadAlbum', {eventId: eventId, eventTitle: eventTitle})}>
           <View style={styles.buttonContainer}>
-            <FontAwesomeIcon icon={faDownload} style={styles.buttonsIcon} size={20} color={"white"}/>           
+            <FontAwesomeIcon icon={faDownload} style={styles.buttonsIcon} size={25} color={"white"}/>           
           </View>
         </TouchableOpacity>
         <Button
           title="Evaluate"
-          onPress={() => navigation.navigate('EvaluatePhoto')}
+          onPress={() => navigation.navigate('EvaluatePhoto', {eventId: eventId, eventTitle: eventTitle})}
         />
         <TouchableOpacity onPress={handleUploadButtonClick}>
           <View style={styles.buttonContainer}>
-            <FontAwesomeIcon icon={faPlus} style={styles.buttonsIcon} size={20} color={"white"}/> 
+            <FontAwesomeIcon icon={faPlus} style={styles.buttonsIcon} size={30} color={"white"}/> 
           </View>
         </TouchableOpacity>        
       </View>
