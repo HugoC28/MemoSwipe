@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Button, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-ico-material-design';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -8,6 +7,9 @@ import commonStyles from '../assets/styles';
 import { pickImage } from '../services/imgStorageService';
 import EventImagesOverview from '../components/EventImagesOverview';
 import { getUserId } from '../services/authService';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faDownload, faPlus} from '@fortawesome/free-solid-svg-icons';
+
 
 type EventDetailScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'EventDetail'>;
@@ -64,7 +66,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
       <View style={{width:'100%' , height: 100, marginTop:4, backgroundColor: '#d9d9d9', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
         <TouchableOpacity onPress={() => navigation.navigate('DownloadAlbum')}>
           <View style={styles.buttonContainer}>
-            <Icon name="download-button" style={styles.buttonsIcon} width={50} heihgt={50} color="white" />
+            <FontAwesomeIcon icon={faDownload} style={styles.buttonsIcon} size={20} color={"white"}/>           
           </View>
         </TouchableOpacity>
         <Button
@@ -73,7 +75,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
         />
         <TouchableOpacity onPress={handleUploadButtonClick}>
           <View style={styles.buttonContainer}>
-            <Icon name="add-plus-button" style={styles.buttonsIcon} width={50} heihgt={50} color="white" />
+            <FontAwesomeIcon icon={faPlus} style={styles.buttonsIcon} size={20} color={"white"}/> 
           </View>
         </TouchableOpacity>        
       </View>
