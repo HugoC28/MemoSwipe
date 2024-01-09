@@ -1,14 +1,45 @@
-import React from 'react';
+import React, {useState , useEffect} from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
+import auth from '@react-native-firebase/auth';
+
 
 type HomeScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+
+  const [username, setUsername] = useState("");
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
+      
+      if (user)
+      {
+        setLoggedIn(true);
+        setUsername(user.displayName || "");
+      }
+      else
+      setLoggedIn(false);
+    });
+
+    return () => unsubscribe(); // Cleanup function to unsubscribe when component unmounts
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await auth().signOut();
+      setLoggedIn(false);
+    } catch (error) {
+
+    }
+    
+  };
+
   return (    
     <View style={commonStyles.container}>
        <Image
@@ -17,8 +48,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       />
       <Text style={styles.title}>MemoSwipe</Text>
       <Text style={styles.subtitle}>Share your memories</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
+      {isLoggedIn && (<Text style={styles.subtitle}>Welcome back {username}</Text>) }
+        {!isLoggedIn ? (
+          
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
           style={styles.button}          
           onPress={() => navigation.navigate("SignIn")}
         >
@@ -30,7 +64,23 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         >
           <Text style={styles.buttontext}>Login</Text>
         </TouchableOpacity>
-      </View>
+        </View>
+        ) : (
+        <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}          
+          onPress={() => navigation.navigate("EventsList")}
+        >
+          <Text style={styles.buttontext}>Continue</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}          
+          onPress={handleLogout}
+        >
+          <Text style={styles.buttontext}>Log out</Text>
+        </TouchableOpacity>
+        </View>)}
+      
     </View>
   );
 };
