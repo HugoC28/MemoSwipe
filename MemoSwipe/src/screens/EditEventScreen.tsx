@@ -77,7 +77,12 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
     }
     else
     {
-      
+      const eventDocRef = firestore().collection("Events").doc(event.id);
+      eventDocRef.update({
+        title: event.title,
+        date: event.date,
+        description: event.description,
+      });
       console.log("Event updated, ID: " + eventId);
     }
     navigation.navigate("EventsList");
@@ -102,7 +107,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         const users = await getMultipleUsersByUUIDs(members_id);        
         const membersNumber = users.length;
 
-        setEvent((prevEvent) => ({...prevEvent,  title: title.toString(), date: date.toDate(), description: description.toString(), invitation_code: invitation_code.toString(), memberCount: membersNumber, members_name: users}));
+        setEvent((prevEvent) => ({...prevEvent,  id: id, title: title.toString(), date: date.toDate(), description: description.toString(), invitation_code: invitation_code.toString(), memberCount: membersNumber, members_name: users}));
         
         console.log(users)   
         setTitle("Edit Event")
