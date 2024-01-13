@@ -28,9 +28,14 @@ export const authSignUp = async (username: string, email: string, password: stri
             const user = credetials.user;
             await user.updateProfile({
             displayName: username
-            });
-            console.debug("New user created: " + email);
-            resultError = await authLogin(email, password); // login user after sign up            
+            });       
+            resultError = await authLogin(email, password); // login user after sign up
+            firestore().collection("Useres").add({
+                uuid: getUserId(),
+                username: getUsername(),
+            })              
+            console.debug("New user created: " + email);     
+
         })
         .catch(error => {
             console.warn("Error:" + error.code);
