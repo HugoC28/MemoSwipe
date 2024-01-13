@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, Button,Alert, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCamera, faUserGroup, faAngleRight, faPlus, faRotateRight} from '@fortawesome/free-solid-svg-icons';
 import { getUserId, getUserEmail, getUsername } from '../services/authService';
 import { useIsFocused } from "@react-navigation/native";
+import Dialog from "react-native-dialog";
 
 interface Event {
   id: string;
@@ -27,21 +28,41 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
   const isFocused = useIsFocused();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-
-  
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [invitationCode, setInvitationCode] = useState("");
 
   const showMenu = () =>
   {
-    Alert.alert(
-      'Add Event',
-      'Do you want to create a new event or do you want to enter an invitation code to join an event?',
-      [
-        { text: 'Enter invitation code', onPress: () =>navigation.goBack() },
-        { text: 'Create a new Event', onPress: () =>navigation.navigate("EditEvent", {eventId: "", eventTitle: ""}) },
-      ],
-      { cancelable: true }
-    );
-    console.log("open");
+    setMenuVisible(true);  
+  }
+  const closeMenu = () =>
+  {
+    setMenuVisible(false);  
+  }
+
+  const joinEvent = async() =>
+  {
+    setMenuVisible(false);  
+    setLoading(true);
+    const eventQuery = firestore().collection('Events').where("invitation_code", "==", invitationCode.toUpperCase());
+
+    try {
+    const querySnapshot = await eventQuery.get();
+    const numberOfDocs = querySnapshot.size;
+
+      if (numberOfDocs === 1) {
+        const documentRef = querySnapshot.docs[0].ref;        
+        await documentRef.set({
+          members_id: firestore.FieldValue.arrayUnion(getUserId())
+        }, { merge: true });
+        navigation.navigate("EventDetail", {eventId: querySnapshot.docs[0].id})
+        await fetchEvents();
+      }       
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+        
   }
 
   const fetchEvents = async () => {
@@ -70,6 +91,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
         console.log(eventData);
         setEvents(eventData);
     } catch (error) {
+      console.error(error);
       console.error('Error fetching events:', error);
     }
     finally {
@@ -84,6 +106,18 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <Dialog.Container visible={menuVisible}>
+        <Dialog.Title>New Event</Dialog.Title>
+        <Dialog.Description>
+          Do you want join an existing event with an invitation code or do you want create new event?
+        </Dialog.Description>        
+        <Dialog.Input label="Invitation Code" onChangeText={ic => setInvitationCode(ic)} value={invitationCode}/>
+        <Dialog.Button label="Close" onPress={closeMenu} />
+        <Dialog.Button label="Create new Event" onPress={() => navigation.navigate("EditEvent", {eventId: "", eventTitle: "" })} />
+        <Dialog.Button label="Join with Code" onPress={joinEvent} />
+      </Dialog.Container>
+
+
       <View style={styles.headerView}>     
         <View style={styles.headerContainer}>
           <Image
@@ -105,6 +139,8 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
       {loading ? (
         <ActivityIndicator style={styles.activityIndicator} size={50} color={'#2F80ED'}/>
       ) : (
+      
+
       <FlatList
         style={styles.list}
         data={events}
@@ -127,8 +163,8 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
             </View>
           </TouchableOpacity>
         )}
-      />)}
-   </View>
+      />)}      
+   </View>   
   );
 };
 
