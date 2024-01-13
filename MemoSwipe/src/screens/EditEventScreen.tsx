@@ -7,7 +7,7 @@ import { RouteProp } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faShareFromSquare, faCheck, faCalendarDay, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import { getMultipleUsersByUUIDs, getUsername } from '../services/authService';
+import { getMultipleUsersByUUIDs, getUsername , getUserId} from '../services/authService';
 import DatePicker from 'react-native-date-picker'
 import Share from 'react-native-share';
 
@@ -29,15 +29,23 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
     members_name: string[];
     memberCount: number;
   }
+
+  interface FirebaseEvent {
+    title: string;
+    date: Date;
+    description: string;
+    invitation_code: string;
+    members_id: string[];
+  }
   
   const eventData: SingleEvent = {
     id: '',
     title: '',
     date: new Date(),
     description: '',
-    invitation_code: "",
-    members_name: [],
-    memberCount: 0,
+    invitation_code: generateRandomCode(),
+    members_name: [getUserId() || ""],
+    memberCount: 1,
   };
 
   const [event, setEvent] = useState(eventData);
@@ -51,6 +59,27 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
 
   const saveEvent = () => 
   {
+    
+    if(event.id == '')// new Events
+    {
+      firestore().collection('Events').add(
+        {
+          title: event.title,
+          date: event.date,
+          description: event.description,
+          invitation_code: event.invitation_code,
+          members_id: [ 
+            getUserId()           
+          ]
+        }
+      );      
+      console.log("New Event created");
+    }
+    else
+    {
+      
+      console.log("Event updated, ID: " + eventId);
+    }
     navigation.navigate("EventsList");
   }
 
@@ -78,7 +107,6 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         console.log(users)   
         setTitle("Edit Event")
       } else {
-        event.invitation_code = generateRandomCode();
         setTitle("New Event")
       }
 
