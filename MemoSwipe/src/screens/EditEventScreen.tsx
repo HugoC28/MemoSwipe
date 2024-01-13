@@ -4,14 +4,11 @@ import { View, TextInput, Image,TouchableOpacity, ActivityIndicator, Text, FlatL
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { RouteProp } from '@react-navigation/native';
-import commonStyles from '../assets/styles';
 import firestore from '@react-native-firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCamera, faUserGroup, faCheck, faPlus, faRotateRight} from '@fortawesome/free-solid-svg-icons';
-import { getUserId, getUserEmail, getUsername } from '../services/authService';
-import { color } from '@rneui/themed/dist/config';
-import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from 'react-native-popup-menu';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { faShareFromSquare, faCheck, faCalendarDay, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import { getMultipleUsersByUUIDs } from '../services/authService';
+import DatePicker from 'react-native-date-picker'
 
 
 
@@ -24,7 +21,17 @@ type EditEventScreenProps = {
 const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) => {
   const {eventId, eventTitle } = route.params;
 
-  var eventData = {
+  interface SingleEvent {
+    id: string;
+    title: string;
+    date: Date;
+    description: string;
+    invitation_code: string;
+    members_name: string[];
+    memberCount: number;
+  }
+  
+  const eventData: SingleEvent = {
     id: '',
     title: '',
     date: new Date(),
@@ -43,14 +50,6 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
     fetchEvent();
   }, []);
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date1: Date) => {    
-    setEvent((prevEvent) => ({...prevEvent,  date: date1}));
-    hideDatePicker();  };
-
   const saveEvent = () => 
   {
     navigation.navigate("EventsList");
@@ -67,13 +66,17 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         const userData = eventDoc.data();
         const id = eventId;
         const title = userData?.title;
-        const date = userData?.date;
+        const date = userData?.date;        
         const description = userData?.description;      
         const invitation_code = userData?.invitation_code;     
         const members_id = userData?.members_id || [];
 
-        setEvent((prevEvent) => ({...prevEvent,  title: title.toString(), date: date, description: description, invitation_code: invitation_code}));
+        const users = await getMultipleUsersByUUIDs(members_id);        
+        const membersNumber = users.length;
+
+        setEvent((prevEvent) => ({...prevEvent,  title: title.toString(), date: date.toDate(), description: description.toString(), invitation_code: invitation_code.toString(), memberCount: membersNumber, members_name: users}));
         
+        console.log(users)   
         setTitle("Edit Event")
       } else {
           setTitle("New Event")
@@ -110,7 +113,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         </View> 
         <View style={styles.titleContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesomeIcon icon={faRotateRight} style={styles.headerIcons} size={25} />
+          <FontAwesomeIcon icon={faArrowLeft} style={styles.headerIcons} size={25} />
         </TouchableOpacity>
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity onPress={saveEvent}>
@@ -123,37 +126,71 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
       ) : (
         <View>
 
-        <Text>Title</Text>
+        <Text style={styles.caption}>Title</Text>
         <TextInput
           style={styles.input}
-          placeholder="Title"
+          placeholder="Type the title of your trip here"
           value={event.title}
           onChangeText={(text) => setEvent((prevEvent) => ({...prevEvent,  title: text,}))}
         />
-        <Text>Description</Text>
+
+        <View style={styles.divider}></View>
+
+        <Text style={styles.caption}>Description</Text>
         <TextInput
           style={styles.input}
-          placeholder="Description"
+          placeholder="Type the description of your trip here"
           value={event.description}
           onChangeText={(text) => setEvent((prevEvent) => ({...prevEvent,  description: text,}))}
-        />   
-        <Text>Invitation Code</Text>
-        <Text>{event.invitation_code}</Text> 
-        <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-          <FontAwesomeIcon icon={faCheck} style={styles.headerIcons} size={25} />
-        </TouchableOpacity>
-          
-      <Text>Date:</Text>
-      <Text>{event.date.toDateString()}</Text>
-      <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-          <FontAwesomeIcon icon={faCheck} style={styles.headerIcons} size={25} />
-      </TouchableOpacity>
+        /> 
+
+        <View style={styles.divider}></View>
+
+        <View style={styles.vConatiner}>
+          <View>
+            <Text style={styles.caption}>Invitation Code </Text>
+            <Text style={styles.text}>{event.invitation_code}</Text> 
+          </View> 
+          <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
+              <FontAwesomeIcon icon={faShareFromSquare} style={styles.vIcons} size={20} />
+          </TouchableOpacity>
+        </View> 
+
+        <View style={styles.divider}></View>
+
+        <View style={styles.vConatiner}>
+          <View>
+            <Text style={styles.caption}>Date</Text>
+            <Text style={styles.text}>{event.date.toDateString()}</Text>
+          </View>
+          <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
+            <FontAwesomeIcon icon={faCalendarDay} style={styles.vIcons} size={20} />
+          </TouchableOpacity>
+        </View>        
       
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
+      
+      <DatePicker
+        modal
+        mode={"date"}
+        open={isDatePickerVisible}
+        date={event.date}
+        onConfirm={(date) => {       
+          setEvent((prevEvent) => ({...prevEvent,  date: date,}))
+          setDatePickerVisibility(false)
+        }}
+        onCancel={() => {
+          setDatePickerVisibility(false)
+        }}
+      />
+      <View style={styles.divider}></View>
+      <Text style={styles.caption}>Group Members ({event.memberCount}):</Text>
+      <FlatList
+        style={styles.list}
+        data={event.members_name}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <Text style={styles.text}>{item}</Text>
+        )}
       />
       </View>
       )}
@@ -210,42 +247,47 @@ const styles = StyleSheet.create({
   listItem: {
     padding: 10,
     borderBottomColor: 'black',
-    borderBottomWidth: StyleSheet.hairlineWidth,   
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',    
     justifyContent: "space-between",
   },
-  listTextContainer: {   
-    justifyContent: "flex-start",
-  },
-  listIconContainer: {   
-    alignItems: 'center',
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  listTitle: {        
-    fontSize: 20,
-    textAlign: "left",    
+  caption:
+  {
+    paddingLeft: 10,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 5,
-    color: "#343C44",
+    color: "#000000",
   },
-  listDescription: {        
-    fontSize: 12,
-    textAlign: "left", 
+  input:
+  {
+    paddingLeft: 20,
+    fontSize: 14,
+    color: "#000000"
   },
-  listIcons: {   
-    color: "#343C44",
-    marginRight: 5,
-    marginLeft: 5,
-  },
-  listRightArrow: {   
-    color: "#AAA",   
-    marginLeft: 15,
+  text:
+  {
+    paddingLeft: 20,
+    fontSize: 14,
+    color: "#000000"
   },
   activityIndicator:{
     padding: 20
+  },
+  vConatiner: {
+    flexDirection: 'row',  
+    alignItems: 'center',    
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  vIcons: {   
+    color: "#2F80ED",
+    paddingRight: 100,
+  },
+  divider: {
+    borderBottomWidth: 0.5,
+    borderColor: 'black', // Du kannst die Farbe entsprechend anpassen
+    marginVertical: 10, // Einstellen, wie viel Platz oberhalb und unterhalb des Trennelements sein soll
   },
   
 });
