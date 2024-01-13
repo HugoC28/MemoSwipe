@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCamera, faUserGroup, faAngleRight, faPlus, faRotateRight} from '@fortawesome/free-solid-svg-icons';
 import { getUserId, getUserEmail, getUsername } from '../services/authService';
 import { color } from '@rneui/themed/dist/config';
-import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from 'react-native-popup-menu';
 
 interface Event {
   id: string;
