@@ -110,7 +110,7 @@ export const getUserEmail = () =>
     return user?.email;
 }
 
-export const getUserByUsername = async (uuid: string) => {
+export const getUsernameByUUID = async (uuid: string) => {
     const usersRef = firestore().collection('users').where('uuid', '==', uuid);
   
     try {
