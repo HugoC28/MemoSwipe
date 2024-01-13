@@ -30,7 +30,7 @@ export const authSignUp = async (username: string, email: string, password: stri
             displayName: username
             });       
             resultError = await authLogin(email, password); // login user after sign up
-            firestore().collection("Useres").add({
+            firestore().collection("Users").add({
                 uuid: getUserId(),
                 username: getUsername(),
             })              
