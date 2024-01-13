@@ -7,7 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCamera, faUserGroup, faAngleRight, faPlus, faRotateRight} from '@fortawesome/free-solid-svg-icons';
 import { getUserId, getUserEmail, getUsername } from '../services/authService';
-import { color } from '@rneui/themed/dist/config';
+import { useIsFocused } from "@react-navigation/native";
 
 interface Event {
   id: string;
@@ -24,7 +24,7 @@ type EventsListScreenProps = {
 const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
 
   const userId = getUserId();
-
+  const isFocused = useIsFocused();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -79,7 +79,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
 
   useEffect(() => {    
     fetchEvents();
-  }, []);
+  }, [isFocused]);
 
 
   return (
