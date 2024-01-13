@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, Button, StyleSheet } from 'react-native';
+import { View, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, Button,Alert, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
@@ -7,7 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCamera, faUserGroup, faAngleRight, faPlus, faRotateRight} from '@fortawesome/free-solid-svg-icons';
 import { getUserId, getUserEmail, getUsername } from '../services/authService';
-import { color } from '@rneui/themed/dist/config';
+import { useIsFocused } from "@react-navigation/native";
 
 interface Event {
   id: string;
@@ -24,16 +24,35 @@ type EventsListScreenProps = {
 const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
 
   const userId = getUserId();
-
+  const isFocused = useIsFocused();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+
+  
+
+  const showMenu = () =>
+  {
+    Alert.alert(
+      'Add Event',
+      'Do you want to create a new event or do you want to enter an invitation code to join an event?',
+      [
+        { text: 'Enter invitation code', onPress: () =>navigation.goBack() },
+        { text: 'Create a new Event', onPress: () =>navigation.navigate("EditEvent", {eventId: "", eventTitle: ""}) },
+      ],
+      { cancelable: true }
+    );
+    console.log("open");
+  }
+
   const fetchEvents = async () => {
     setLoading(true);
     try {
+      
       const snapshot = await firestore()
-        .collection('Events')
+        .collection('Events')        
         .where('members_id', 'array-contains', userId)
         .get();
+      
       const eventData: Event[] = await Promise.all(
           snapshot.docs.map(async (doc) => {
             const photosSnapshot = await doc.ref.collection('Photos').get();
@@ -48,6 +67,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
             };
           })
         );
+        console.log(eventData);
         setEvents(eventData);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -59,7 +79,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
 
   useEffect(() => {    
     fetchEvents();
-  }, []);
+  }, [isFocused]);
 
 
   return (
@@ -77,7 +97,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
           <FontAwesomeIcon icon={faRotateRight} style={styles.headerIcons} size={25} />
         </TouchableOpacity>
         <Text style={styles.title}>My Events</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('CreateEvent')}>
+        <TouchableOpacity onPress={showMenu}>
           <FontAwesomeIcon icon={faPlus} style={styles.headerIcons} size={25} />
         </TouchableOpacity>
         </View>            
@@ -108,7 +128,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
           </TouchableOpacity>
         )}
       />)}
-    </View>
+   </View>
   );
 };
 

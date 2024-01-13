@@ -1,5 +1,5 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { color } from '@rneui/themed/dist/config';
+import firestore from '@react-native-firebase/firestore';
 
 interface authResult {
     user: FirebaseAuthTypes.User;
@@ -109,3 +109,39 @@ export const getUserEmail = () =>
     const user = auth().currentUser;
     return user?.email;
 }
+
+export const getUsernameByUUID = async (uuid: string) => {
+    const usersRef = firestore().collection('users').where('uuid', '==', uuid);
+  
+    try {
+      const querySnapshot = await usersRef.get();
+  
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        const username = userData.username;
+        return username;
+      } else {
+        return 'Unknown user';
+      }
+    } catch (error) {
+      console.error('Error getting user:', error);
+      return 'Unknown user';
+    }
+  };
+
+  export const getMultipleUsersByUUIDs = async (uuids: string[]): Promise<string[]>  => {
+    try {
+      const collectionRef = firestore().collection('Users');      
+
+      const querySnapshot = await collectionRef.where('uuid', 'in', uuids).get();      
+      
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      console.debug(data);
+      const usernames = data.map(user => user.username);
+      return usernames;
+
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+      return [];
+    }
+  };
