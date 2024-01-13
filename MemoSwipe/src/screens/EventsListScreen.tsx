@@ -44,7 +44,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
   {
     setMenuVisible(false);  
     setLoading(true);
-    const eventQuery = firestore().collection('Events').where("invitation_code", "==", invitationCode);
+    const eventQuery = firestore().collection('Events').where("invitation_code", "==", invitationCode.toUpperCase());
 
     try {
     const querySnapshot = await eventQuery.get();
@@ -55,6 +55,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
         await documentRef.set({
           members_id: firestore.FieldValue.arrayUnion(getUserId())
         }, { merge: true });
+        navigation.navigate("EventDetail", {eventId: querySnapshot.docs[0].id})
         await fetchEvents();
       }       
     } catch (error) {
