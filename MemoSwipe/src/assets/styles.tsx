@@ -10,6 +10,7 @@ const commonStyles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: 'black',
   },
 });
 
