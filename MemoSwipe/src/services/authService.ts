@@ -128,3 +128,20 @@ export const getUsernameByUUID = async (uuid: string) => {
       return 'Unknown user';
     }
   };
+
+  export const getMultipleUsersByUUIDs = async (uuids: string[]): Promise<string[]>  => {
+    try {
+      const collectionRef = firestore().collection('Users');      
+
+      const querySnapshot = await collectionRef.where('uuid', 'in', uuids).get();      
+      
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      console.debug(data);
+      const usernames = data.map(user => user.username);
+      return usernames;
+
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+      return [];
+    }
+  };
