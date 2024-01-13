@@ -1,5 +1,5 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { color } from '@rneui/themed/dist/config';
+import firestore from '@react-native-firebase/firestore';
 
 interface authResult {
     user: FirebaseAuthTypes.User;
@@ -109,3 +109,22 @@ export const getUserEmail = () =>
     const user = auth().currentUser;
     return user?.email;
 }
+
+export const getUserByUsername = async (uuid: string) => {
+    const usersRef = firestore().collection('users').where('uuid', '==', uuid);
+  
+    try {
+      const querySnapshot = await usersRef.get();
+  
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        const username = userData.username;
+        return username;
+      } else {
+        return 'Unknown user';
+      }
+    } catch (error) {
+      console.error('Error getting user:', error);
+      return 'Unknown user';
+    }
+  };
