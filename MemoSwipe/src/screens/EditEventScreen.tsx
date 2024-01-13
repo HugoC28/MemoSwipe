@@ -7,10 +7,9 @@ import { RouteProp } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faShareFromSquare, faCheck, faCalendarDay, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import { getMultipleUsersByUUIDs } from '../services/authService';
+import { getMultipleUsersByUUIDs, getUsername } from '../services/authService';
 import DatePicker from 'react-native-date-picker'
-
-
+import Share from 'react-native-share';
 
 
 type EditEventScreenProps = {
@@ -79,7 +78,8 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         console.log(users)   
         setTitle("Edit Event")
       } else {
-          setTitle("New Event")
+        event.invitation_code = generateRandomCode();
+        setTitle("New Event")
       }
 
       
@@ -99,6 +99,22 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
       setLoading(false);
     }
   };
+
+  const shareCode = async () => {
+    const shareResponse = await Share.open({message: "Hey,\n" + getUsername() + " is inviting you to share some photos for: "+ event.title + "\nHere is your code to join the group on MemoSwipe: " + event.invitation_code});
+  }; 
+
+  function generateRandomCode() {
+    const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let code = '';
+  
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      code += characters.charAt(randomIndex);
+    }
+  
+    return code;
+  }
 
 
   return (
@@ -151,7 +167,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
             <Text style={styles.caption}>Invitation Code </Text>
             <Text style={styles.text}>{event.invitation_code}</Text> 
           </View> 
-          <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
+          <TouchableOpacity onPress={shareCode}>
               <FontAwesomeIcon icon={faShareFromSquare} style={styles.vIcons} size={20} />
           </TouchableOpacity>
         </View> 
