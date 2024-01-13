@@ -83,7 +83,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
 
   return (
     <View style={commonStyles.container}>
-      <View style={{ width:'100%' , height: 200, marginBottom:4, backgroundColor: '#d9d9d9', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+      <View style={{ width:'100%' , height: 200, marginBottom:4, backgroundColor: '#E8EEF3', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
         <Button
           title="<"
           onPress={() => navigation.navigate('EventsList')}
@@ -95,7 +95,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
         />
       </View>
       <EventImagesOverview eventId={eventId} />
-      <View style={{width:'100%' , height: 100, marginTop:4, backgroundColor: '#d9d9d9', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+      <View style={{width:'100%' , height: 100, marginTop:4, backgroundColor: '#E8EEF3', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
         <TouchableOpacity onPress={() => navigation.navigate('DownloadAlbum', {eventId: eventId, eventTitle: eventTitle})}>
           <View style={styles.buttonContainer}>
             <FontAwesomeIcon icon={faDownload} style={styles.buttonsIcon} size={25} color={"white"}/>           
