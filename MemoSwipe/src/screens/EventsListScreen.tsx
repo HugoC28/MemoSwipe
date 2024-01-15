@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   number:{
-    width: 15,
+    width: 20,
   },
   
 });
