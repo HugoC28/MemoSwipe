@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Button, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -66,7 +66,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
   };
 
   return (
-    <View style={commonStyles.container}>
+    <SafeAreaView style={commonStyles.container}>
       <View style={styles.headerContainer}>
         <View style={styles.rowContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -98,7 +98,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
           </View>
         </TouchableOpacity>        
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

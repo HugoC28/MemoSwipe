@@ -84,7 +84,7 @@ const EventImagesOverview: React.FC<EventImagesOverviewProps> = ({ eventId }) =>
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "white"}}>
       <ScrollView contentContainerStyle={styles.imageGridContainer}>
         {photos.map((photo, index) => (
           <View key={index} style={styles.imageContainer}>
