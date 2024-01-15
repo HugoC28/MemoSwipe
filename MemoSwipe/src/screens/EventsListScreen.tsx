@@ -160,9 +160,9 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
               </View>
               <View style={styles.listIconContainer}> 
                 <FontAwesomeIcon icon={faCamera} style={styles.listIcons} size={25} />
-                <Text>{item.photoCount}</Text>
+                <Text style={styles.number}>{item.photoCount}</Text>
                 <FontAwesomeIcon icon={faUserGroup} style={styles.listIcons} size={25} />
-                <Text>{item.memberCount}</Text>
+                <Text style={styles.number}>{item.memberCount}</Text>
                 <FontAwesomeIcon icon={faAngleRight} style={styles.listRightArrow} size={25} />
               </View>            
             </View>
@@ -258,6 +258,9 @@ const styles = StyleSheet.create({
   },
   activityIndicator:{
     padding: 20
+  },
+  number:{
+    width: 15,
   },
   
 });
