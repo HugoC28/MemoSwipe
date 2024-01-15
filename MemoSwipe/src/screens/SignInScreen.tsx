@@ -61,6 +61,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Your email address"
+          placeholderTextColor={"#BBB"}
           keyboardType="email-address"
           autoCapitalize="none"          
           value={email}
@@ -72,6 +73,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Your password"
+          placeholderTextColor={"#BBB"}
           secureTextEntry={true}
           autoCapitalize="none"          
           value={password}

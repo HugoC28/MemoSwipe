@@ -184,6 +184,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         <TextInput
           style={styles.input}
           placeholder="Type the title of your trip here"
+          placeholderTextColor={"#BBB"}
           value={event.title}
           onChangeText={(text) => setEvent((prevEvent) => ({...prevEvent,  title: text,}))}
         />
@@ -194,6 +195,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         <TextInput
           style={styles.input}
           placeholder="Type the description of your trip here"
+          placeholderTextColor={"#BBB"}
           value={event.description}
           onChangeText={(text) => setEvent((prevEvent) => ({...prevEvent,  description: text,}))}
         /> 
