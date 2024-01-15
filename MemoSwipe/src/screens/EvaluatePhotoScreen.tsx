@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Button, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
@@ -18,7 +18,7 @@ const EvaluatePhotoScreen: React.FC<EvaluatePhotoScreenProps> = ({navigation, ro
   const {eventId, eventTitle } = route.params;
   const userId = getUserId() as string;
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={styles.rowContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -35,7 +35,7 @@ const EvaluatePhotoScreen: React.FC<EvaluatePhotoScreenProps> = ({navigation, ro
       </View>
       {userId?<ImageSwipe eventId={eventId} userId={userId} />
       :<Text>An error occured, try to reconnect</Text>}
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, KeyboardAvoidingView, TextInput, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, Button, Alert, StyleSheet } from 'react-native';
+import { View, KeyboardAvoidingView, TextInput, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, SafeAreaView, Alert, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { RouteProp } from '@react-navigation/native';
@@ -156,7 +156,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.headerView}>     
         <View style={styles.titleContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -168,6 +168,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         </TouchableOpacity>
         </View>            
       </View>
+      <View style={styles.screen}>  
       {loading ? (
         <ActivityIndicator style={styles.activityIndicator} size={50} color={'#2F80ED'}/>
       ) : (
@@ -243,7 +244,8 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
       />
       </KeyboardAvoidingView>
       )}
-   </View>
+      </View>  
+   </SafeAreaView>
   );
 };
 
@@ -252,6 +254,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",
+    backgroundColor: "#E8EEF3",
   },
   headerView: {
     padding: 10,
@@ -339,6 +342,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: 'black', // Du kannst die Farbe entsprechend anpassen
     marginVertical: 10, // Einstellen, wie viel Platz oberhalb und unterhalb des Trennelements sein soll
+  },
+  screen: {
+    paddingTop: 10,
+    backgroundColor: "white",
+    height: "100%"
   },
   
 });

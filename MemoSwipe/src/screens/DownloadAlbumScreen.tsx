@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Button, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Button, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -122,7 +122,7 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={styles.rowContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -163,7 +163,7 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
           </View>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
