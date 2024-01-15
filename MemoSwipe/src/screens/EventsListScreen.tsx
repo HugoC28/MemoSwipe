@@ -248,6 +248,8 @@ const styles = StyleSheet.create({
   listDescription: {        
     fontSize: 12,
     textAlign: "left", 
+    color: "#10416D",
+    fontStyle: "italic",
   },
   listIcons: {   
     color: "#343C44",
@@ -263,6 +265,7 @@ const styles = StyleSheet.create({
   },
   number:{
     width: 20,
+    color: "#10416D",
   },
   
 });
