@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, Button, Alert, StyleSheet } from 'react-native';
+import { View, KeyboardAvoidingView, TextInput, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, Button, Alert, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { RouteProp } from '@react-navigation/native';
@@ -89,7 +89,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
   }
 
   const fetchEvent = async () => {
-    if(event.id == '')// new Events
+    if(eventId == '')// new Events
     {
       setLoading(false);
       return;
@@ -178,12 +178,13 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
       {loading ? (
         <ActivityIndicator style={styles.activityIndicator} size={50} color={'#2F80ED'}/>
       ) : (
-        <View>
+        <KeyboardAvoidingView>
 
         <Text style={styles.caption}>Title</Text>
         <TextInput
           style={styles.input}
           placeholder="Type the title of your trip here"
+          placeholderTextColor={"#BBB"}
           value={event.title}
           onChangeText={(text) => setEvent((prevEvent) => ({...prevEvent,  title: text,}))}
         />
@@ -194,6 +195,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         <TextInput
           style={styles.input}
           placeholder="Type the description of your trip here"
+          placeholderTextColor={"#BBB"}
           value={event.description}
           onChangeText={(text) => setEvent((prevEvent) => ({...prevEvent,  description: text,}))}
         /> 
@@ -246,7 +248,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
           <Text style={styles.text}>{item}</Text>
         )}
       />
-      </View>
+      </KeyboardAvoidingView>
       )}
    </View>
   );
@@ -315,12 +317,14 @@ const styles = StyleSheet.create({
   },
   input:
   {
+    paddingTop: 5,
     paddingLeft: 20,
     fontSize: 14,
     color: "#000000"
   },
   text:
   {
+    paddingTop: 5,
     paddingLeft: 20,
     fontSize: 14,
     color: "#000000"

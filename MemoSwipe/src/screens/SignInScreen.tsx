@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, TouchableOpacity, Text, TextInput, Image, StyleSheet } from 'react-native';
+import { View, KeyboardAvoidingView, TouchableOpacity, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -37,7 +37,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
       
     }
   return (
-    <View style={commonStyles.container}>
+    <KeyboardAvoidingView  style={commonStyles.container}>
        <Image
         source={require('../assets/logo.png')}
         style={styles.logo}
@@ -61,6 +61,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Your email address"
+          placeholderTextColor={"#BBB"}
           keyboardType="email-address"
           autoCapitalize="none"          
           value={email}
@@ -72,6 +73,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Your password"
+          placeholderTextColor={"#BBB"}
           secureTextEntry={true}
           autoCapitalize="none"          
           value={password}
@@ -89,7 +91,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           <Text style={styles.buttontext}>Sign Up</Text>
         </TouchableOpacity>
       )}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
