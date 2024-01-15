@@ -6,7 +6,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
 import { pickImage } from '../services/imgStorageService';
 import EventImagesOverview from '../components/EventImagesOverview';
-import { getUserId } from '../services/authService';
+import { getUserId, getUsername } from '../services/authService';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleLeft, faDownload, faPlus, faEllipsisVertical} from '@fortawesome/free-solid-svg-icons';
 import firestore from '@react-native-firebase/firestore';
@@ -57,8 +57,9 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
 
   const handleUploadButtonClick = () => {
     const userId = getUserId?.(); // Optional chaining to handle potential undefined
-    if (userId) {
-      pickImage({ userId });
+    const userName = getUsername?.();
+    if (userId && userName) {
+      pickImage({ userId, eventId, userName});
     } else {
       console.error("User ID is undefined");
     }

@@ -21,7 +21,7 @@ export const uploadImage = async (uri: string, imageName: string) => {
   }
 };
 
-export const addImageToFirestore = async (imageUrl: string | null, eventId: string, uploaderId: string) => {
+export const addImageToFirestore = async (imageUrl: string | null, eventId: string, uploaderId: string, uploaderName: string) => {
   if (!imageUrl) {
     console.error('Invalid image URL');
     return;
@@ -37,6 +37,7 @@ export const addImageToFirestore = async (imageUrl: string | null, eventId: stri
       dislikes: [],
       likes: [],
       uploader_id: uploaderId,
+      uploader_name: uploaderName,
       url: imageUrl,
     });
 
@@ -50,7 +51,7 @@ interface PickImageParams {
   userId: string;
 }
 
-export const pickImage = ({ userId }: { userId: string }): void => {
+export const pickImage = ({ userId, eventId, userName }: { userId: string, eventId:string, userName: string }): void => {
     const options = {
     mediaType: 'photo' as const, // Set mediaType to 'photo' or 'video'
   };
@@ -65,7 +66,7 @@ export const pickImage = ({ userId }: { userId: string }): void => {
       uploadImage(uri, imageName)
         .then((imageUrl) => {
           if (imageUrl) {
-            addImageToFirestore(imageUrl, 'mBRSLWVzup7jEsZyITVn', userId);
+            addImageToFirestore(imageUrl, eventId, userId, userName);
           }
         })
         .catch((error) => {

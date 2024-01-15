@@ -8,6 +8,7 @@ interface Card {
   dislikes: string[];
   likes: string[];
   uploader_id: string;
+  uploader_name: string;
   url: string;
 }
 
@@ -125,7 +126,7 @@ return (
       <View style={styles.bottomContainer}>
         <View style={styles.uploaderContainer}>
             {currentCardIndex < cards.length ? <Text style={styles.uploaderText}>
-                {"Uploaded by user : " + (cards[currentCardIndex]?.uploader_id || 'Unknown')/* TODO : replace by user name */}
+                {"Uploaded by user : " + (cards[currentCardIndex]?.uploader_name || 'Unknown')}
             </Text>:
             <></>}
         </View>
