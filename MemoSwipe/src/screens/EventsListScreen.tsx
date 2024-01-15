@@ -113,8 +113,8 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
         </Dialog.Description>        
         <Dialog.Input label="Invitation Code" onChangeText={ic => setInvitationCode(ic)} value={invitationCode}/>
         <Dialog.Button label="Close" onPress={closeMenu} />
-        <Dialog.Button label="Create new Event" onPress={() => navigation.navigate("EditEvent", {eventId: "", eventTitle: "" })} />
-        <Dialog.Button label="Join with Code" onPress={joinEvent} />
+        <Dialog.Button label="New Event" onPress={() => navigation.navigate("EditEvent", {eventId: "", eventTitle: "" })} />
+        <Dialog.Button label="Join" onPress={joinEvent} />
       </Dialog.Container>
 
 
