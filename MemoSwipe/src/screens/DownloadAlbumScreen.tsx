@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Button, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -10,7 +10,7 @@ import firestore from '@react-native-firebase/firestore';
 import RNFetchBlob from 'rn-fetch-blob';
 import URL from 'url-parse';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faDownload, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
 interface Photo {
   dislikes: string[];
@@ -43,9 +43,17 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
         snapshot.forEach((doc) => {
           const data = doc.data() as Photo;
           updatedPhotos.push(data);
+          const { likes, dislikes } = data;
+          const rate = likes.length - dislikes.length;
         });
         
+        const meanRates = Math.round(updatedPhotos.reduce((sum, photo) => {
+          const value = photo.likes.length - photo.dislikes.length;
+          return sum + value;
+        }, 0) / updatedPhotos.length);
         setPhotos(updatedPhotos);
+        console.log(meanRates);
+        setMinValue(meanRates);
       });
 
     return () => unsubscribe();
@@ -115,26 +123,53 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
 
   return (
     <View style={styles.container}>
-      <Button
-        title="<"
-        onPress={() => navigation.goBack()}
-      />
-      <Text style={styles.text} >Download photos of : {eventTitle}</Text>
-      <Text style={styles.text}>Only include photos better rated than :</Text>
-      <Picker
-        style={styles.picker}
-        selectedValue={minValue}
-        onValueChange={(itemValue, itemIndex) => setMinValue(itemValue as number)}
-        dropdownIconColor="#535353"
-      >
-        {renderPickerItems()}
-      </Picker>
-      <Text style={styles.text}>Number of photos to download : {imagesUrlList.length}</Text>
-      <TouchableOpacity onPress={() => downloadImages()}>
+      <View style={styles.headerContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../assets/logo.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.appname}>MemoSwipe</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <FontAwesomeIcon icon={faAngleLeft} style={styles.backIcon} size={25} />
+          </TouchableOpacity>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{eventTitle}</Text>
+            <Text style={styles.subtitle}>Download the album !</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('EditEvent', {eventId: eventId, eventTitle: eventTitle})}>
+            <FontAwesomeIcon icon={faEllipsisVertical} style={styles.editIcon} size={25} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.mainContainer}>
+        <View style={styles.microContainer}>
+          <Text style={styles.text}>Only include photos better rated than :</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              style={styles.picker}
+              selectedValue={minValue}
+              onValueChange={(itemValue, itemIndex) => setMinValue(itemValue as number)}
+              dropdownIconColor="#535353"
+            >
+              {renderPickerItems()}
+            </Picker>
+          </View>
+        </View>
+        <View style={styles.microContainer}>
+          <Text style={styles.text}>Number of photos to download : </Text> 
+          <View style={styles.numberContainer}>
+            <Text style={styles.numberText}>{imagesUrlList.length}</Text>
+          </View>
+        </View>
+        <TouchableOpacity onPress={() => downloadImages()}>
           <View style={styles.buttonContainer}>
             <FontAwesomeIcon icon={faDownload} size={40} color={"white"}/>           
           </View>
         </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -145,23 +180,102 @@ export default DownloadAlbumScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#E8EEF3',
   },
+  headerContainer:{
+    width:'100%' ,
+    maxHeight:200,
+    marginBottom:4, 
+    backgroundColor: '#E8EEF3', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    flexDirection: 'column',
+  },
+  logoContainer: {
+    flexDirection: 'row',   
+    alignItems: 'center',
+    width: "100%",
+    justifyContent: "center",
+    marginBottom:10,
+    marginTop:10,
+  },
+  logo: {
+    width: 50 ,
+    height: 50, 
+    marginRight: 10,
+  },
+  appname: {
+    fontSize: 16,
+    color: "#555555"
+  },
+  rowContainer: {
+    flexDirection: 'row',  
+    alignItems: 'center',    
+    width: "100%",
+    justifyContent: "space-between",
+    padding: 10,
+  },
+  backIcon: {
+    marginRight:10,
+    color: '#10416D',
+  },
+  editIcon: {
+    marginLeft:8,
+    color: '#10416D',
+  },
+  titleContainer: {
+    flexDirection: 'column',  
+    alignItems: 'center', 
+    padding: 2,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: "#000000"
+  },
+  subtitle: {
+    fontSize: 16,
+    fontStyle:'italic',
+    color: "#10416D",
+    flexWrap: 'wrap',
+  },
+  mainContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#E8EEF3',
+    marginTop:50,
+  },
+  microContainer:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  numberContainer:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 100,
+    maxHeight:55,
+    borderRadius: 10,
+    backgroundColor: 'white',
+  },
+  numberText:{
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: "#000000"
+  },
   pickerContainer: {
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 5,
-    marginBottom: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
     overflow: 'hidden',
   },
   picker: {
-    backgroundColor: 'white',
-    borderRadius: 5,
     height: 40,
     width: 110,
-    color: '#535353'
+    color: '#535353',
   },
   text: {
     fontSize: 16,

@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     color: "#000000"
   },
   headerIcons: {   
-    color: "#2F80ED",
+    color: "#10416D",
   },
   logo: {
     width: 50 ,
