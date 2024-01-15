@@ -124,13 +124,6 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
 
 
       <View style={styles.headerView}>     
-        <View style={styles.headerContainer}>
-          <Image
-          source={require('../assets/logo.png')}
-          style={styles.logo}
-          />
-          <Text style={styles.appname}>MemoSwipe</Text>  
-        </View> 
         <View style={styles.titleContainer}>
         <TouchableOpacity onPress={() => fetchEvents()}>
           <FontAwesomeIcon icon={faRotateRight} style={styles.headerIcons} size={25} />
@@ -186,6 +179,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',  
   },
   headerContainer: {
+    marginTop: 10,
     flexDirection: 'row',   
     alignItems: 'center',    
     width: "100%",
@@ -260,7 +254,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   number:{
-    width: 15,
+    width: 20,
   },
   
 });

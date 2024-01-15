@@ -158,13 +158,6 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
   return (
     <View style={styles.container}>
       <View style={styles.headerView}>     
-        <View style={styles.headerContainer}>
-          <Image
-          source={require('../assets/logo.png')}
-          style={styles.logo}
-          />
-          <Text style={styles.appname}>MemoSwipe</Text>  
-        </View> 
         <View style={styles.titleContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesomeIcon icon={faAngleLeft} style={styles.headerIcons} size={25} />

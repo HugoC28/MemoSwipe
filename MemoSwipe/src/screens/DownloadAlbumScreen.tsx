@@ -124,13 +124,6 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('../assets/logo.png')}
-            style={styles.logo}
-          />
-          <Text style={styles.appname}>MemoSwipe</Text>
-        </View>
         <View style={styles.rowContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <FontAwesomeIcon icon={faAngleLeft} style={styles.backIcon} size={25} />
