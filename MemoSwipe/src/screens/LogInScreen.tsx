@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, TouchableOpacity, Text, TextInput, Image, StyleSheet } from 'react-native';
+import { View,KeyboardAvoidingView, TouchableOpacity, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -36,7 +36,7 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <View style={commonStyles.container}>
+    <KeyboardAvoidingView behavior='padding' style={commonStyles.container}>
        <Image
         source={require('../assets/logo.png')}
         style={styles.logo}
@@ -85,7 +85,7 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ navigation }) => {
         </TouchableOpacity>
       )}
       
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
