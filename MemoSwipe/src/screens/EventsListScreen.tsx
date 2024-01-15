@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, Button,Alert, StyleSheet } from 'react-native';
+import { View, Image,TouchableOpacity, ActivityIndicator, Text, FlatList, SafeAreaView ,Alert, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
@@ -110,7 +110,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Dialog.Container visible={menuVisible}>
         <Dialog.Title>New Event</Dialog.Title>
         <Dialog.Description>
@@ -162,7 +162,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
           </TouchableOpacity>
         )}
       />)}      
-   </View>   
+   </SafeAreaView> 
   );
 };
 
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",
+    backgroundColor: '#E8EEF3',
   },
   headerView: {
     padding: 10,
@@ -212,6 +213,7 @@ const styles = StyleSheet.create({
   },
   list: {        
     width: '100%',
+    backgroundColor: "white",
   },
   listItem: {
     padding: 10,
