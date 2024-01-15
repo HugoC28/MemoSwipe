@@ -55,7 +55,6 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
         await documentRef.set({
           members_id: firestore.FieldValue.arrayUnion(getUserId())
         }, { merge: true });
-        setMenuVisible(false); 
         navigation.navigate("EventDetail", {eventId: querySnapshot.docs[0].id})
         
       }       
@@ -64,6 +63,11 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
     }
     setLoading(false);
         
+  }
+  
+  const addEvent = () => {
+    setMenuVisible(false); 
+    navigation.navigate("EditEvent", {eventId: "", eventTitle: "" })
   }
 
   const fetchEvents = async () => {
@@ -114,7 +118,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
         </Dialog.Description>        
         <Dialog.Input label="Invitation Code" onChangeText={ic => setInvitationCode(ic)} value={invitationCode}/>
         <Dialog.Button label="Close" onPress={closeMenu} />
-        <Dialog.Button label="New Event" onPress={() => navigation.navigate("EditEvent", {eventId: "", eventTitle: "" })} />
+        <Dialog.Button label="New Event" onPress={addEvent} />
         <Dialog.Button label="Join" onPress={joinEvent} />
       </Dialog.Container>
 

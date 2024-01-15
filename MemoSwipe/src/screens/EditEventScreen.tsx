@@ -89,6 +89,11 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
   }
 
   const fetchEvent = async () => {
+    if(event.id == '')// new Events
+    {
+      setLoading(false);
+      return;
+    }
     setLoading(true);   
     try {
       
