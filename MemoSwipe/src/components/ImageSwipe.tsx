@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import TinderCard from 'react-tinder-card';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHeart, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface Card {
   id: string,
@@ -118,7 +120,7 @@ return (
         ) : (
           <View style={styles.completedContainer}>
             <Text style={styles.completedText}>
-              You already evaluated all photos!
+              You already evaluated all photos.
             </Text>
           </View>
         )}
@@ -126,13 +128,21 @@ return (
       <View style={styles.bottomContainer}>
         <View style={styles.uploaderContainer}>
             {currentCardIndex < cards.length ? <Text style={styles.uploaderText}>
-                {"Uploaded by user : " + (cards[currentCardIndex]?.uploader_name || 'Unknown')}
+                {"Uploaded by : " + (cards[currentCardIndex]?.uploader_name || 'Unknown')}
             </Text>:
             <></>}
         </View>
         <View style={styles.buttonsContainer}>
-          <Button title="Dislike" onPress={() => swipe('left')} disabled={currentCardIndex >= cards.length} />
-          <Button title="Like" onPress={() => swipe('right')} disabled={currentCardIndex >= cards.length}/>
+          <TouchableOpacity onPress={() => swipe('left')} disabled={currentCardIndex >= cards.length}>
+            <View style={styles.buttonDislikeContainer}>
+              <FontAwesomeIcon icon={faXmark} size={40} color={"white"}/>           
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => swipe('right')} disabled={currentCardIndex >= cards.length}>
+            <View style={styles.buttonLikeContainer}>
+              <FontAwesomeIcon icon={faHeart} size={40} color={"white"}/>           
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -144,6 +154,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#E8EEF3',
   },
   cardContainer: {
     flex: 1,
@@ -199,6 +210,34 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     display: "flex",
     position: "absolute",
+  },
+  buttonDislikeContainer: {
+    backgroundColor: '#D63F3F',
+    borderRadius: 100,
+    width: 80,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5,
+    margin:40,
+  },
+  buttonLikeContainer: {
+    backgroundColor: '#1A7639',
+    borderRadius: 100,
+    width: 80,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5,
+    margin:40,
   },
 });
 
