@@ -55,8 +55,9 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
         await documentRef.set({
           members_id: firestore.FieldValue.arrayUnion(getUserId())
         }, { merge: true });
+        setMenuVisible(false); 
         navigation.navigate("EventDetail", {eventId: querySnapshot.docs[0].id})
-        await fetchEvents();
+        
       }       
     } catch (error) {
       console.error(error);

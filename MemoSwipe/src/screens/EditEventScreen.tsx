@@ -44,7 +44,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
     date: new Date(),
     description: '',
     invitation_code: generateRandomCode(),
-    members_name: [getUserId() || ""],
+    members_name: [getUsername() || ""],
     memberCount: 1,
   };
 
