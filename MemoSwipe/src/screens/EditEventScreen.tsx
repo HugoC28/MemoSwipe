@@ -6,7 +6,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { RouteProp } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faShareFromSquare, faCheck, faCalendarDay, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import { faShareFromSquare, faCheck, faCalendarDay, faArrowLeft, faAngleLeft} from '@fortawesome/free-solid-svg-icons';
 import { getMultipleUsersByUUIDs, getUsername , getUserId} from '../services/authService';
 import DatePicker from 'react-native-date-picker'
 import Share from 'react-native-share';
@@ -167,7 +167,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
         </View> 
         <View style={styles.titleContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesomeIcon icon={faArrowLeft} style={styles.headerIcons} size={25} />
+          <FontAwesomeIcon icon={faAngleLeft} style={styles.headerIcons} size={25} />
         </TouchableOpacity>
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity onPress={saveEvent}>
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     color: "#000000"
   },
   headerIcons: {   
-    color: "#2F80ED",
+    color: '#10416D',
   },
   logo: {
     width: 50 ,
