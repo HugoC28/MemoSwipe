@@ -120,7 +120,7 @@ return (
         ) : (
           <View style={styles.completedContainer}>
             <Text style={styles.completedText}>
-              You already evaluated all photos.
+              You've already evaluated all the photos.
             </Text>
           </View>
         )}
@@ -134,12 +134,12 @@ return (
         </View>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity onPress={() => swipe('left')} disabled={currentCardIndex >= cards.length}>
-            <View style={styles.buttonDislikeContainer}>
+            <View style={[styles.buttonDislikeContainer, currentCardIndex >= cards.length && styles.buttonContainerDisabled]}>
               <FontAwesomeIcon icon={faXmark} size={40} color={"white"}/>           
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => swipe('right')} disabled={currentCardIndex >= cards.length}>
-            <View style={styles.buttonLikeContainer}>
+            <View style={[styles.buttonLikeContainer, currentCardIndex >= cards.length && styles.buttonContainerDisabled]}>
               <FontAwesomeIcon icon={faHeart} size={40} color={"white"}/>           
             </View>
           </TouchableOpacity>
@@ -186,6 +186,9 @@ const styles = StyleSheet.create({
   completedText: {
     fontSize: 20,
     color: 'black',
+    maxWidth: '70%',
+    flexWrap: 'wrap',
+    textAlign: 'center'
   },
   bottomContainer: {
     height: 150,
@@ -238,6 +241,9 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
     margin:40,
+  },
+  buttonContainerDisabled: {
+    backgroundColor: '#7D7D7D',
   },
 });
 

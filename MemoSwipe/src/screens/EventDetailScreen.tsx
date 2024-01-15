@@ -82,16 +82,17 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
         </View>
       </View>
       <EventImagesOverview eventId={eventId} />
-      <View style={{width:'100%' , height: 100, marginTop:4, backgroundColor: '#E8EEF3', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+      <View style={styles.buttonsView}>
         <TouchableOpacity onPress={() => navigation.navigate('DownloadAlbum', {eventId: eventId, eventTitle: eventTitle})}>
           <View style={styles.buttonContainer}>
             <FontAwesomeIcon icon={faDownload} style={styles.buttonsIcon} size={25} color={"white"}/>           
           </View>
         </TouchableOpacity>
-        <Button
-          title="Evaluate"
-          onPress={() => navigation.navigate('EvaluatePhoto', {eventId: eventId, eventTitle: eventTitle})}
-        />
+        <TouchableOpacity 
+        onPress={() => navigation.navigate('EvaluatePhoto', {eventId: eventId, eventTitle: eventTitle})}
+        style={styles.evalButton}>
+          <Text style={styles.textEvalButton}>Evaluate</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleUploadButtonClick}>
           <View style={styles.buttonContainer}>
             <FontAwesomeIcon icon={faPlus} style={styles.buttonsIcon} size={30} color={"white"}/> 
@@ -181,5 +182,26 @@ const styles = StyleSheet.create({
   },
   button:{
     borderRadius: 10,
+  },
+  buttonsView:{
+    width:'100%',
+    height: 100, 
+    marginTop:4, 
+    backgroundColor: '#E8EEF3', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    flexDirection: 'row',
+  },
+  evalButton:{
+    backgroundColor: '#2F80ED',
+    borderRadius: 8,
+    width: 100,
+    height:50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textEvalButton:{
+    color: 'white',
+    fontSize: 18,
   }
 });
