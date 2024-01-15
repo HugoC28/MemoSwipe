@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
-import { pickImage } from '../services/imgStorageService';
+import { pickImages } from '../services/imgStorageService';
 import EventImagesOverview from '../components/EventImagesOverview';
 import { getUserId, getUsername } from '../services/authService';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -59,7 +59,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ navigation, route
     const userId = getUserId?.(); // Optional chaining to handle potential undefined
     const userName = getUsername?.();
     if (userId && userName) {
-      pickImage({ userId, eventId, userName});
+      pickImages({ userId, eventId, userName});
     } else {
       console.error("User ID is undefined");
     }
