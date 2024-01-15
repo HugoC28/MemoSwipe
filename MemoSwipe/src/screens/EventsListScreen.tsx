@@ -56,8 +56,14 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
           members_id: firestore.FieldValue.arrayUnion(getUserId())
         }, { merge: true });
         navigation.navigate("EventDetail", {eventId: querySnapshot.docs[0].id})
-        
-      }       
+      } 
+      else
+      {
+        Alert.alert(
+          "Event not found",
+          "We did not found a event for the invitation code: " + invitationCode.toUpperCase()
+        )
+      }
     } catch (error) {
       console.error(error);
     }
