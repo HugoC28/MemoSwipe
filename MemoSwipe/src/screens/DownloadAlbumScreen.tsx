@@ -93,7 +93,7 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
     
         if(Platform.OS === 'ios')
         {
-          CameraRoll.saveToCameraRoll(imageUrl);
+          CameraRoll.save(imageUrl, {type: "photo", album:"MemoSwpie" });
           
         }
         else
