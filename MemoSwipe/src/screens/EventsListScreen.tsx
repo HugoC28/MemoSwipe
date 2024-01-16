@@ -144,7 +144,7 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
         <ActivityIndicator style={styles.activityIndicator} size={50} color={'#2F80ED'}/>
       ) : (
       
-
+      events.length>0?(
       <FlatList
         style={styles.list}
         data={events}
@@ -167,7 +167,16 @@ const EventsListScreen: React.FC<EventsListScreenProps> = ({navigation}) => {
             </View>
           </TouchableOpacity>
         )}
-      />)}      
+      />)
+      :<View style={{alignItems:'center'}}>
+      <Text style={styles.textEmpty}>
+          You're not in any event yet...
+        </Text>
+        <Text style={styles.textEmpty}>
+          Join an event or create a new one using the "+" button !
+      </Text>
+    </View>)
+    }      
    </SafeAreaView> 
   );
 };
@@ -267,7 +276,15 @@ const styles = StyleSheet.create({
     width: 20,
     color: "#10416D",
   },
-  
+  textEmpty: {
+    fontSize: 16,
+    fontStyle:'italic',
+    color: "#10416D",
+    flexWrap: 'wrap',
+    marginTop: 20,
+    maxWidth: '70%',
+    textAlign: 'center',
+  },  
 });
 
 export default EventsListScreen;

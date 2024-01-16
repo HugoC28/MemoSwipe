@@ -26,17 +26,17 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     width: '31%', // Set width to 1/3 of the screen
-    aspectRatio: 1, // Ensure images maintain aspect ratio
+    aspectRatio: 1,
     margin: 4,
   },
   image: {
-    width: '100%', // Take the whole container
-    aspectRatio: 1, // Ensure images maintain aspect ratio
+    width: '100%',
+    aspectRatio: 1,
   },
   imageWrapper: {
     flex: 1,
-    overflow: 'hidden', // Clip the shadow outside the image
-    borderRadius: 3, // Adjust the border radius as needed
+    overflow: 'hidden',
+    borderRadius: 3,
     shadowColor: 'black',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
@@ -55,6 +55,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5, // For Android elevation
+  },
+  textEmpty: {
+    fontSize: 16,
+    fontStyle:'italic',
+    color: "#10416D",
+    flexWrap: 'wrap',
+    marginTop: 20,
+    maxWidth: '70%',
+    textAlign: 'center',
+  },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "white", 
+    width: "100%",
+    alignItems: 'center',
   },
 });
 
@@ -84,7 +99,8 @@ const EventImagesOverview: React.FC<EventImagesOverviewProps> = ({ eventId }) =>
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "white", width: "100%"}}>
+    <View style={styles.mainContainer}>
+      {photos.length>0?
       <ScrollView contentContainerStyle={styles.imageGridContainer}>
         {photos.map((photo, index) => (
           <View key={index} style={styles.imageContainer}>
@@ -97,6 +113,15 @@ const EventImagesOverview: React.FC<EventImagesOverviewProps> = ({ eventId }) =>
           </View>
         ))}
       </ScrollView>
+      :<View>
+        <Text style={styles.textEmpty}>
+            No images yet...
+          </Text>
+          <Text style={styles.textEmpty}>
+            Upload images using the + button !
+        </Text>
+      </View>
+        }
     </View>
   );
 };
