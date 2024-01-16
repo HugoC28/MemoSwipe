@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Button, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { View, Button, Text, StyleSheet, TouchableOpacity, Image,Platform, SafeAreaView } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -142,7 +142,7 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
           <Text style={styles.text}>Only include photos better rated than :</Text>
           <View style={styles.pickerContainer}>
             <Picker
-              style={styles.picker}
+              style={Platform.OS === 'ios' ? styles.iosPicker : styles.androidPicker}
               selectedValue={minValue}
               onValueChange={(itemValue, itemIndex) => setMinValue(itemValue as number)}
               dropdownIconColor="#535353"
@@ -265,10 +265,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
   },
-  picker: {
+  androidPicker: {
     height: 40,
     width: 110,
     color: '#535353',
+  },
+  iosPicker: { 
+    width: 200,
+    color: '#535353',
+    height: 200,
   },
   text: {
     fontSize: 16,
