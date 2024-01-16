@@ -80,6 +80,14 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
 
   const downloadImages = async () => {
     try {
+
+      //Create aLbum
+      if(Platform.OS === 'ios')
+        {
+          const logoURL = "https://firebasestorage.googleapis.com/v0/b/memoswipe-ef543.appspot.com/o/logo.png?alt=media&token=871c0b2e-5c83-4e58-8822-a38840702e72"
+          await CameraRoll.saveAsset(logoURL, {album: eventTitle });
+        }
+
       const { config, fs } = RNFetchBlob;
     
         // Use map to iterate over each URL in the imagesUrlList
@@ -93,8 +101,7 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
     
         if(Platform.OS === 'ios')
         {
-          CameraRoll.save(imageUrl, {type: "photo", album:"MemoSwpie" });
-          
+          CameraRoll.saveAsset(imageUrl, {type: "photo", album: eventTitle });
         }
         else
         {
