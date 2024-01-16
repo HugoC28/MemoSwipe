@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Button, Text, StyleSheet, TouchableOpacity, Image,Platform, SafeAreaView } from 'react-native';
+import { CameraRoll } from "@react-native-camera-roll/camera-roll";
+import {View, Button, Text, StyleSheet, TouchableOpacity, Image,Platform, SafeAreaView, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import commonStyles from '../assets/styles';
@@ -82,7 +82,7 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
     try {
       const { config, fs } = RNFetchBlob;
     
-      // Use map to iterate over each URL in the imagesUrlList
+        // Use map to iterate over each URL in the imagesUrlList
       const downloadPromises = imagesUrlList.map(async (imageUrl) => {
         const parsedUrl = new URL(imageUrl, true);
         const decodedPathname = decodeURIComponent(parsedUrl.pathname);
@@ -91,22 +91,38 @@ const DownloadAlbumScreen: React.FC<DownloadAlbumScreenProps> = ({navigation, ro
         console.log('Downloading:', fileName, '...');
         console.log(imageUrl);
     
-        const response = await RNFetchBlob.config({
-          fileCache: true,
-          appendExt: 'jpg',
-          addAndroidDownloads: {
-            useDownloadManager: true,
-            notification: true,
-            path: fs.dirs.DownloadDir + `/${fileName}`,
-            description: 'Downloading file',
-          },
-        }).fetch('GET', imageUrl);
-    
-        console.log('File downloaded to:', response.path());
+        if(Platform.OS === 'ios')
+        {
+          CameraRoll.saveToCameraRoll(imageUrl);
+          
+        }
+        else
+        {
+          const response = await RNFetchBlob.config({
+            fileCache: true,
+            appendExt: 'jpg',
+            addAndroidDownloads: {
+              useDownloadManager: true,
+              notification: true,
+              path: fs.dirs.DownloadDir + `/${fileName}`,
+              description: 'Downloading file',
+            },
+          }).fetch('GET', imageUrl);
+      
+          console.log('File downloaded to:', response.path());
+        }
+        
       });
     
       // Wait for all download promises to resolve
       await Promise.all(downloadPromises);
+      if(Platform.OS === 'ios')
+      {
+        Alert.alert(
+          "Download done",
+          "We downloaded the pictures to your camera roll."
+        )
+      }
     } catch (error) {
       console.error('Error downloading file:', error);
     }
