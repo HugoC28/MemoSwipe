@@ -172,7 +172,7 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
       {loading ? (
         <ActivityIndicator style={styles.activityIndicator} size={50} color={'#2F80ED'}/>
       ) : (
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView behavior='padding'>
 
         <Text style={styles.caption}>Title</Text>
         <TextInput

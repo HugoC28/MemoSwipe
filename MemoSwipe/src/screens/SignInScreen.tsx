@@ -37,7 +37,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
       
     }
   return (
-    <KeyboardAvoidingView  style={commonStyles.container}>
+    <KeyboardAvoidingView behavior='padding' style={commonStyles.container}>
        <Image
         source={require('../assets/logo.png')}
         style={styles.logo}
