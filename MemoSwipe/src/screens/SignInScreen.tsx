@@ -51,6 +51,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Your username"
+          placeholderTextColor={"#BBB"}
           autoCapitalize="none"
           value={username}
           onChangeText={setUsername}
