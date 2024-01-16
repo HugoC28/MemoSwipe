@@ -67,6 +67,26 @@ export const authLogin = async (email: string, password: string) =>
     return resultError;
 }
 
+export const authResetEmail = async (email: string) =>
+{
+    if(email.trim() == "")
+    {
+        return "Email can not be empty"
+    }
+    var resultError = null;
+    
+        await auth()
+        .sendPasswordResetEmail(email)
+        .catch(error => {
+            console.warn("Error:" + error.code);
+            resultError = getErrorMessage(error.code);
+        });
+    
+   
+    return resultError;
+}
+
+
 function getErrorMessage(errorcode: string): string 
 {
     var resultError = "Unknown error";

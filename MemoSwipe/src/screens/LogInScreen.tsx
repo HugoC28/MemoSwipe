@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { View,KeyboardAvoidingView, TouchableOpacity, Text, TextInput, Image, StyleSheet } from 'react-native';
+import { View,KeyboardAvoidingView, Alert, TouchableOpacity, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope, faLock, faUser} from '@fortawesome/free-solid-svg-icons';
 import commonStyles from '../assets/styles';
 import { ActivityIndicator } from 'react-native-paper';
-import { authLogin } from '../services/authService';
+import { authLogin, authResetEmail } from '../services/authService';
 
 
 type LogInScreenProps = {
@@ -33,6 +33,15 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ navigation }) => {
     }      
     setLoading(false);
     
+  }
+
+  const resetEmail = () => {
+    authResetEmail(email);
+    Alert.alert(
+      "Reset email was sent",
+      "We sent a email to reset your password"
+    )
+    navigation.navigate("Home");
   }
 
   return (
@@ -70,7 +79,7 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ navigation }) => {
         />
       </View>
       
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity onPress={resetEmail}>
         <Text style={styles.link}>Forgot you password?</Text>
       </TouchableOpacity>
       {error!="" && <Text style={styles.errortext}>{error}</Text>}
