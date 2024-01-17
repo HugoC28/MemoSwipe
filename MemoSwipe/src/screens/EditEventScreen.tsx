@@ -138,6 +138,38 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
     }
   };
 
+  const leaveEvent = () => {
+    Alert.alert(
+      'Confirmation',
+      'Do you want to leave this event?',
+      [
+        { text: 'No', style: 'cancel' },
+        { text: 'Yes', onPress: () => leaveEventYes() },
+      ],
+      { cancelable: false }
+    );
+  }
+  const leaveEventYes = () => {
+    setLoading(true);
+    const eventRef = firestore().collection('Events').doc(eventId);
+    eventRef.update({
+      members_id: firestore.FieldValue.arrayRemove(getUserId())
+    })
+    .then(() => {
+      setLoading(false);
+      navigation.navigate("EventsList");
+     })
+    .catch((error) => {
+      setLoading(false);
+      Alert.alert(
+        "Unkown Error",
+        "We could not remove you from this event"
+      )
+      console.error(`Error removing user: ${error}`);
+    });
+    
+  }
+
   const shareCode = async () => {
     const shareResponse = await Share.open({message: "Hey,\n" + getUsername() + " is inviting you to share some photos for: "+ event.title + "\nHere is your code to join the group on MemoSwipe: " + event.invitation_code});
   }; 
@@ -242,6 +274,13 @@ const EditEventScreen: React.FC<EditEventScreenProps> = ({navigation, route}) =>
           <Text style={styles.text}>{item}</Text>
         )}
       />
+      {eventId != '' ? 
+      (
+      <TouchableOpacity onPress={leaveEvent}>
+        <Text style={styles.leaveText}>Leave event</Text>
+      </TouchableOpacity>
+      ) : (<></>)}
+      
       </KeyboardAvoidingView>
       )}
       </View>  
@@ -347,6 +386,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: "white",
     height: "100%"
+  },
+  leaveText:{
+    color: "red",
+    textDecorationLine: 'underline',
+    paddingTop: 5,
+    paddingLeft: 20,
   },
   
 });
